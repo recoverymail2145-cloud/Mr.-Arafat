@@ -62,12 +62,13 @@ export const ProjectGrid: React.FC<ProjectGridProps> = ({
         {/* Section Header + Search & Category Filter Controls */}
         <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-[#f2efeb]/10">
           <div className="space-y-2">
-            <p className="text-xs font-mono-tabular text-[#e32b3c]">
-              01. Personal Journal &amp; Reflections
+            <p className="text-xs font-mono-tabular text-[#f59e0b]">
+              01. Personal Photography &amp; Technical Captures
             </p>
             <h2
               id="work-heading"
               className="font-display text-3xl sm:text-5xl text-[#f2efeb] tracking-wide uppercase"
+              style={{ fontFamily: "'Hind Siliguri', var(--font-display)" }}
             >
               {t.selectedWorkTitle}
             </h2>

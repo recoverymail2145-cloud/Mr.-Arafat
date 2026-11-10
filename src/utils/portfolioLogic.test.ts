@@ -13,38 +13,38 @@ import {
 } from './portfolioLogic';
 import { defaultSiteConfig } from '../config/site';
 
-test('deriveCategories extracts unique personal journal categories when configuredCategories is empty', () => {
+test('deriveCategories extracts unique photography and capture categories when configuredCategories is empty', () => {
   const categories = deriveCategories(defaultSiteConfig.portfolio.projects, []);
-  assert.ok(categories.includes('Reflections'));
-  assert.ok(categories.includes('Life Notes'));
-  assert.ok(categories.includes('Philosophy'));
-  assert.ok(categories.includes('Technology & Culture'));
+  assert.ok(categories.includes('পোর্ট্রেট ও লাইফস্টাইল'));
+  assert.ok(categories.includes('নিজের ফটোগ্রাফি'));
+  assert.ok(categories.includes('টেকনিক্যাল ক্যাপচার'));
+  assert.ok(categories.includes('প্রিয় মুহূর্ত'));
   assert.equal(categories.length, 4);
 });
 
-test('filterProjects filters journal notes by category and search query accurately', () => {
+test('filterProjects filters personal captures by category and search query accurately', () => {
   const all = filterProjects(defaultSiteConfig.portfolio.projects, {
-    category: 'All Entries',
+    category: 'সব ক্যাপচার',
     searchQuery: '',
-    allCategoriesLabel: 'All Entries',
+    allCategoriesLabel: 'সব ক্যাপচার',
   });
   assert.equal(all.length, 4);
 
-  const reflectionsOnly = filterProjects(defaultSiteConfig.portfolio.projects, {
-    category: 'Reflections',
+  const portraitOnly = filterProjects(defaultSiteConfig.portfolio.projects, {
+    category: 'পোর্ট্রেট ও লাইফস্টাইল',
     searchQuery: '',
-    allCategoriesLabel: 'All Entries',
+    allCategoriesLabel: 'সব ক্যাপচার',
   });
-  assert.equal(reflectionsOnly.length, 1);
-  assert.equal(reflectionsOnly[0].id, 'journal-quiet-digital-home');
+  assert.equal(portraitOnly.length, 1);
+  assert.equal(portraitOnly[0].id, 'capture-personal-portrait');
 
-  const curiositySearch = filterProjects(defaultSiteConfig.portfolio.projects, {
-    category: 'All Entries',
-    searchQuery: 'Curiosity',
-    allCategoriesLabel: 'All Entries',
+  const bokehSearch = filterProjects(defaultSiteConfig.portfolio.projects, {
+    category: 'সব ক্যাপচার',
+    searchQuery: 'Bokeh',
+    allCategoriesLabel: 'সব ক্যাপচার',
   });
-  assert.equal(curiositySearch.length, 1);
-  assert.equal(curiositySearch[0].id, 'journal-lifelong-curiosity');
+  assert.equal(bokehSearch.length, 1);
+  assert.equal(bokehSearch[0].id, 'capture-personal-portrait');
 });
 
 test('getActiveSections respects preferences and hides disabled sections', () => {
@@ -67,8 +67,8 @@ test('getActiveSections respects preferences and hides disabled sections', () =>
 });
 
 test('getMotionStorageKey produces deterministic brand-scoped storage key', () => {
-  assert.equal(getMotionStorageKey('MD ARAFAT HOSSN'), 'md_arafat_hossn_motion_pref_v1');
-  assert.equal(getMotionStorageKey('Arafat Personal'), 'arafat_personal_motion_pref_v1');
+  assert.equal(getMotionStorageKey('এমডি আরাফাত হোসেন'), 'portfolio_motion_pref_v1');
+  assert.equal(getMotionStorageKey('arafathossn'), 'arafathossn_motion_pref_v1');
 });
 
 test('validateContactForm rejects empty or invalid inputs and accepts valid personal note', () => {
@@ -86,27 +86,27 @@ test('validateContactForm rejects empty or invalid inputs and accepts valid pers
   const validResult = validateContactForm({
     name: 'Tanvir Ahmed',
     email: 'tanvir@example.com',
-    projectType: 'Personal Hello & Greeting (শুভেচ্ছা বার্তা)',
-    message: 'Assalamu Alaikum Arafat bhai, really enjoyed reading your personal essays!',
+    projectType: 'শুভেচ্ছা ও ব্যক্তিগত বার্তা (Personal Hello)',
+    message: 'আসসালামু আলাইকুম আরাফাত ভাই, আপনার ফটোগ্রাফি ও পার্সোনাল সাইট দারুণ হয়েছে!',
   });
   assert.equal(validResult.valid, true);
   assert.deepEqual(validResult.errors, {});
 });
 
 test('buildMailtoUrl and buildWhatsAppUrl format safe URLs', () => {
-  const mailto = buildMailtoUrl('hello@mdarafathossn.com', {
+  const mailto = buildMailtoUrl('recoverymail2145@gmail.com', {
     name: 'Nusrat',
     email: 'nusrat@example.com',
     projectType: 'Personal Hello',
-    message: 'Wonderful personal website and thoughts on simplicity.',
+    message: 'Wonderful personal photography and captures on arafathossn.com.',
   });
-  assert.ok(mailto.startsWith('mailto:hello%40mdarafathossn.com?subject='));
+  assert.ok(mailto.startsWith('mailto:recoverymail2145%40gmail.com?subject='));
   assert.ok(mailto.includes('Nusrat'));
 
   assert.equal(buildWhatsAppUrl('', 'Hello'), null);
   assert.equal(
-    buildWhatsAppUrl('+880 1712 345678', 'Hello Arafat'),
-    'https://wa.me/8801712345678?text=Hello%20Arafat'
+    buildWhatsAppUrl('+880 1700 000000', 'Hello Arafat'),
+    'https://wa.me/8801700000000?text=Hello%20Arafat'
   );
 });
 

@@ -4,8 +4,10 @@ import {
   ArrowUpRight,
   Copy,
   Check,
-  MessageSquare,
+  MessageCircle,
   AlertCircle,
+  Instagram,
+  Facebook,
 } from 'lucide-react';
 import { SiteConfig, TRANSLATIONS } from '../config/site';
 import {
@@ -20,12 +22,12 @@ interface ContactProps {
 }
 
 export const Contact: React.FC<ContactProps> = ({ config }) => {
-  const t = TRANSLATIONS[config.appearance.language] || TRANSLATIONS.English;
+  const t = TRANSLATIONS[config.appearance.language] || TRANSLATIONS.Bengali;
 
   const [formState, setFormState] = useState<ContactFormInput>({
     name: '',
     email: '',
-    projectType: 'Full-Stack Web Platform',
+    projectType: 'শুভেচ্ছা ও ব্যক্তিগত বার্তা (Personal Hello)',
     message: '',
   });
   const [errors, setErrors] = useState<
@@ -34,23 +36,13 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
   const [preparedMailto, setPreparedMailto] = useState<string | null>(null);
   const [copiedBrief, setCopiedBrief] = useState(false);
 
-  const socialEntries = [
-    { label: 'Instagram', url: config.contact.instagram },
-    { label: 'YouTube', url: config.contact.youtube },
-    { label: 'LinkedIn', url: config.contact.linkedin },
-    { label: 'GitHub', url: config.contact.github },
-    { label: 'Behance', url: config.contact.behance },
-    { label: 'Dribbble', url: config.contact.dribbble },
-    ...config.contact.otherLinks,
-  ].filter((item) => Boolean(item.url && item.url.trim()));
-
   const whatsappDraftUrl = buildWhatsAppUrl(
     config.contact.whatsapp,
     formState.message.trim()
-      ? `Hello ${config.identity.fullName}, I am ${
-          formState.name || 'interested'
-        } inquiring about ${formState.projectType}: ${formState.message}`
-      : `Hello ${config.identity.fullName}, I would like to discuss a project.`
+      ? `হ্যালো ${config.identity.fullName}, আমি ${
+          formState.name || ''
+        }: ${formState.message}`
+      : `হ্যালো ${config.identity.fullName}! আপনার পার্সোনাল ওয়েবসাইট (arafathossn.com) থেকে মেসেজ দিচ্ছি।`
   );
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -64,7 +56,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
 
     setErrors({});
     const mailtoUri = buildMailtoUrl(
-      config.contact.email || 'xyz@gmail.com',
+      config.contact.email || 'recoverymail2145@gmail.com',
       formState
     );
     setPreparedMailto(mailtoUri);
@@ -74,7 +66,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
     const brief = [
       `To: ${config.contact.email}`,
       `From: ${formState.name} (${formState.email})`,
-      `Scope: ${formState.projectType}`,
+      `Topic: ${formState.projectType}`,
       '',
       formState.message,
     ].join('\n');
@@ -96,15 +88,16 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
     >
       <div className="max-w-[1400px] mx-auto px-5 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          {/* Left Column: Direct Contact Details & Verified Channels */}
+          {/* Left Column: Personal Socials (Instagram, WhatsApp, Facebook) & Email */}
           <div className="lg:col-span-5 space-y-8">
             <div className="space-y-3">
-              <p className="text-xs font-mono-tabular text-[#e32b3c]">
-                04. Direct Inquiry
+              <p className="text-xs font-mono-tabular text-[#f59e0b]">
+                04. Personal Socials &amp; Connect
               </p>
               <h2
                 id="contact-heading"
-                className="font-display text-3xl sm:text-5xl text-[#f2efeb] tracking-wide uppercase"
+                className="font-display text-3xl sm:text-4xl text-[#f2efeb] tracking-wide uppercase"
+                style={{ fontFamily: "'Hind Siliguri', var(--font-display)" }}
               >
                 {t.contactTitle}
               </h2>
@@ -113,68 +106,102 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
               </p>
             </div>
 
-            {/* Verified Email Box */}
-            {config.contact.email && (
-              <div className="p-6 rounded-2xl bg-[#121212] border border-[#f2efeb]/10 space-y-3">
-                <p className="text-xs font-mono-tabular text-[#a09c9a] uppercase">
-                  Public Contact Email
-                </p>
+            {/* Dedicated Personal Social Cards: Instagram, WhatsApp, Facebook */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3.5">
+              {config.contact.instagram && (
                 <a
-                  href={`mailto:${config.contact.email}`}
-                  className="inline-flex items-center gap-2.5 text-lg sm:text-xl font-semibold text-[#f2efeb] hover:text-[#e32b3c] transition-colors break-all"
+                  href={config.contact.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-4 rounded-xl bg-[#121212] border border-[#f2efeb]/10 hover:border-[#e32b3c] flex items-center justify-between transition-colors group"
                 >
-                  <Mail className="w-5 h-5 text-[#e32b3c] shrink-0" />
-                  <span>{config.contact.email}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-[#f59e0b]">
+                      <Instagram className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-[#f2efeb]">
+                        Instagram (ইনস্টাগ্রাম)
+                      </p>
+                      <p className="text-xs text-[#a09c9a]">
+                        Personal Photos &amp; Stories
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#a09c9a] group-hover:text-[#e32b3c]" />
                 </a>
-                {config.identity.location && (
-                  <p className="text-xs text-[#a09c9a]">
-                    Base: {config.identity.location}
-                  </p>
-                )}
-              </div>
-            )}
+              )}
 
-            {/* Conditional WhatsApp Action (Only rendered when international digits are configured) */}
-            {whatsappDraftUrl && (
-              <div>
+              {whatsappDraftUrl && (
                 <a
                   href={whatsappDraftUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="min-h-[44px] px-5 py-3 rounded-lg bg-[#141414] border border-[#f2efeb]/15 hover:border-[#e32b3c] text-xs font-semibold text-[#f2efeb] inline-flex items-center gap-2 transition-colors"
+                  className="p-4 rounded-xl bg-[#121212] border border-[#f2efeb]/10 hover:border-[#e32b3c] flex items-center justify-between transition-colors group"
                 >
-                  <MessageSquare className="w-4 h-4 text-[#e32b3c]" />
-                  <span>Open WhatsApp Draft</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-[#f59e0b]">
+                      <MessageCircle className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-[#f2efeb]">
+                        WhatsApp (হোয়াটসঅ্যাপ)
+                      </p>
+                      <p className="text-xs text-[#a09c9a]">
+                        সরাসরি মেসেজ পাঠান
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#a09c9a] group-hover:text-[#e32b3c]" />
                 </a>
-              </div>
-            )}
+              )}
 
-            {/* Verified External / Social Links */}
-            {socialEntries.length > 0 && (
-              <div className="space-y-3 pt-2">
+              {config.contact.facebook && (
+                <a
+                  href={config.contact.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="p-4 rounded-xl bg-[#121212] border border-[#f2efeb]/10 hover:border-[#e32b3c] flex items-center justify-between transition-colors group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-[#1a1a1a] flex items-center justify-center text-[#f59e0b]">
+                      <Facebook className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-[#f2efeb]">
+                        Facebook (ফেসবুক)
+                      </p>
+                      <p className="text-xs text-[#a09c9a]">
+                        এমডি আরাফাত হোসেন প্রোফাইল
+                      </p>
+                    </div>
+                  </div>
+                  <ArrowUpRight className="w-4 h-4 text-[#a09c9a] group-hover:text-[#e32b3c]" />
+                </a>
+              )}
+            </div>
+
+            {/* Verified Personal Email Box */}
+            {config.contact.email && (
+              <div className="p-5 rounded-2xl bg-[#121212] border border-[#f2efeb]/10 space-y-2">
                 <p className="text-xs font-mono-tabular text-[#a09c9a] uppercase">
-                  Verified Profiles &amp; Links
+                  পার্সোনাল ইমেইল (Personal Email)
                 </p>
-                <div className="flex flex-wrap items-center gap-3">
-                  {socialEntries.map((link) => (
-                    <a
-                      key={link.label}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="min-h-[40px] px-4 py-2 rounded-lg bg-[#121212] border border-[#f2efeb]/10 hover:border-[#f2efeb]/35 text-xs font-medium text-[#f2efeb] inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0"
-                    >
-                      <span>{link.label}</span>
-                      <ArrowUpRight className="w-3.5 h-3.5 text-[#e32b3c]" />
-                    </a>
-                  ))}
-                </div>
+                <a
+                  href={`mailto:${config.contact.email}`}
+                  className="inline-flex items-center gap-2.5 text-base sm:text-lg font-semibold text-[#f2efeb] hover:text-[#e32b3c] transition-colors break-all"
+                >
+                  <Mail className="w-5 h-5 text-[#e32b3c] shrink-0" />
+                  <span>{config.contact.email}</span>
+                </a>
+                <p className="text-xs text-[#a09c9a]">
+                  ডোমেইন: arafathossn.com · {config.identity.location}
+                </p>
               </div>
             )}
           </div>
 
-          {/* Right Column: Validated Static Mailto Inquiry Form */}
+          {/* Right Column: Personal Message Form */}
           {config.preferences.showContactForm && (
             <div className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-[#121212] border border-[#f2efeb]/10">
               <form onSubmit={handleSubmit} noValidate className="space-y-5">
@@ -184,7 +211,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                       htmlFor="contact-name"
                       className="block text-xs font-medium text-[#f2efeb]"
                     >
-                      Your Name *
+                      আপনার নাম (Your Name) *
                     </label>
                     <input
                       id="contact-name"
@@ -196,7 +223,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                           name: e.target.value,
                         }))
                       }
-                      placeholder="e.g. Rohan Mehta"
+                      placeholder="আপনার নাম লিখুন..."
                       aria-invalid={Boolean(errors.name)}
                       className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb] placeholder:text-[#a09c9a]/50 focus:border-[#e32b3c]"
                     />
@@ -216,7 +243,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                       htmlFor="contact-email"
                       className="block text-xs font-medium text-[#f2efeb]"
                     >
-                      Your Email *
+                      আপনার ইমেইল (Your Email) *
                     </label>
                     <input
                       id="contact-email"
@@ -228,7 +255,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                           email: e.target.value,
                         }))
                       }
-                      placeholder="you@organization.com"
+                      placeholder="you@example.com"
                       aria-invalid={Boolean(errors.email)}
                       className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb] placeholder:text-[#a09c9a]/50 focus:border-[#e32b3c]"
                     />
@@ -249,7 +276,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                     htmlFor="contact-project-type"
                     className="block text-xs font-medium text-[#f2efeb]"
                   >
-                    Topic of Your Note
+                    বার্তার বিষয় (Topic)
                   </label>
                   <select
                     id="contact-project-type"
@@ -262,17 +289,14 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                     }
                     className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb] focus:border-[#e32b3c]"
                   >
-                    <option value="Personal Hello & Greeting (শুভেচ্ছা বার্তা)">
-                      Personal Hello &amp; Greeting (শুভেচ্ছা বার্তা)
+                    <option value="শুভেচ্ছা ও ব্যক্তিগত বার্তা (Personal Hello)">
+                      শুভেচ্ছা ও ব্যক্তিগত বার্তা (Personal Hello)
                     </option>
-                    <option value="Thoughts on a Journal Note">
-                      Thoughts on a Journal Note
+                    <option value="ফটোগ্রাফি বা ক্যাপচার নিয়ে মতামত (Photography Feedback)">
+                      ফটোগ্রাফি বা ক্যাপচার নিয়ে মতামত (Photography Feedback)
                     </option>
-                    <option value="Book or Idea Recommendation">
-                      Book or Idea Recommendation
-                    </option>
-                    <option value="General Conversation">
-                      General Conversation
+                    <option value="সাধারণ আড্ডা ও পরিচয় (Friendly Chat)">
+                      সাধারণ আড্ডা ও পরিচয় (Friendly Chat)
                     </option>
                   </select>
                 </div>
@@ -282,7 +306,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                     htmlFor="contact-message"
                     className="block text-xs font-medium text-[#f2efeb]"
                   >
-                    Your Personal Message *
+                    আপনার বার্তা (Your Message) *
                   </label>
                   <textarea
                     id="contact-message"
@@ -294,7 +318,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                         message: e.target.value,
                       }))
                     }
-                    placeholder="Write a personal note, share a thought, or say hello..."
+                    placeholder="আপনার ব্যক্তিগত বার্তা বা শুভেচ্ছা এখানে লিখুন..."
                     aria-invalid={Boolean(errors.message)}
                     className="w-full p-4 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb] placeholder:text-[#a09c9a]/50 focus:border-[#e32b3c]"
                   />
@@ -320,18 +344,17 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                   </button>
 
                   <p className="text-xs text-[#a09c9a]">
-                    Static mailto preparation · No third-party tracking
+                    arafathossn.com · ব্যক্তিগত বার্তা
                   </p>
                 </div>
 
-                {/* Honest Static Mailto Preparation Confirmation */}
                 {preparedMailto && (
                   <div
                     data-testid="contact-prepared-panel"
                     className="mt-5 p-4 rounded-xl bg-[#090909] border border-[#e32b3c]/50 space-y-3"
                   >
                     <p className="text-xs sm:text-sm text-[#f2efeb] font-medium">
-                      Your inquiry draft is formatted and ready. Because this is a static portfolio, click below to open your email client or copy the formatted brief:
+                      আপনার মেসেজটি তৈরি হয়েছে! নিচে ক্লিক করে সরাসরি ইমেইল পাঠান অথবা টেক্সট কপি করুন:
                     </p>
                     <div className="flex flex-wrap items-center gap-3">
                       <a
@@ -339,7 +362,7 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                         className="min-h-[40px] px-4 py-2 rounded-lg bg-[#e32b3c] text-xs font-semibold text-[#f2efeb] inline-flex items-center gap-1.5"
                       >
                         <Mail className="w-3.5 h-3.5" />
-                        <span>Open in Email Client</span>
+                        <span>Open Email App</span>
                       </a>
 
                       <button
@@ -350,12 +373,12 @@ export const Contact: React.FC<ContactProps> = ({ config }) => {
                         {copiedBrief ? (
                           <>
                             <Check className="w-3.5 h-3.5 text-[#e32b3c]" />
-                            <span>Brief Copied</span>
+                            <span>Copied!</span>
                           </>
                         ) : (
                           <>
                             <Copy className="w-3.5 h-3.5" />
-                            <span>Copy Brief Text</span>
+                            <span>Copy Message</span>
                           </>
                         )}
                       </button>

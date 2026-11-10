@@ -1,7 +1,17 @@
 import React, { useState } from 'react';
-import { ArrowUpRight, Sliders, Sparkles, Globe } from 'lucide-react';
+import {
+  ArrowUpRight,
+  Sliders,
+  Sparkles,
+  Globe,
+  Instagram,
+  Facebook,
+  MessageCircle,
+  Mail,
+} from 'lucide-react';
 import { SiteConfig, TRANSLATIONS, SupportedLanguage } from '../config/site';
 import { SwarmlineCanvas } from './SwarmlineCanvas';
+import { buildWhatsAppUrl } from '../utils/portfolioLogic';
 
 interface HeroProps {
   config: SiteConfig;
@@ -23,21 +33,34 @@ export const Hero: React.FC<HeroProps> = ({
   onSwitchLanguage,
 }) => {
   const [portraitError, setPortraitError] = useState(false);
-  const t = TRANSLATIONS[config.appearance.language] || TRANSLATIONS.English;
-  const hasRealPortrait = Boolean(config.identity.portrait?.trim() && !portraitError);
+  const t = TRANSLATIONS[config.appearance.language] || TRANSLATIONS.Bengali;
+  const hasRealPortrait = Boolean(
+    config.identity.portrait?.trim() && !portraitError
+  );
   const isBengali = config.appearance.language === 'Bengali';
+
+  const whatsappUrl = buildWhatsAppUrl(
+    config.contact.whatsapp,
+    'হ্যালো আরাফাত ভাই! আপনার পার্সোনাল ওয়েবসাইট (arafathossn.com) থেকে নক দিলাম।'
+  );
 
   return (
     <section
       id="top"
       aria-label="Introduction"
-      className="relative pt-10 pb-16 md:pt-16 md:pb-24 border-b border-[#f2efeb]/10 overflow-hidden"
+      className="relative pt-8 pb-16 md:pt-14 md:pb-24 border-b border-[#f2efeb]/10 overflow-hidden"
     >
-      <div className="max-w-[1400px] mx-auto px-5 sm:px-8">
+      {/* Ambient Background Golden-Crimson Glow */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-32 right-1/4 w-[520px] h-[520px] rounded-full bg-gradient-to-br from-[#e32b3c]/12 via-[#f59e0b]/8 to-transparent blur-3xl"
+      />
+
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-8 relative z-10">
         {/* Split-Screen Personal Hero */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-stretch">
-          {/* Left Column: Personal Name, Bengali Name & Introduction */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-8 transition-all duration-700">
+          {/* Left Column: এমডি আরাফাত হোসেন, Personal Intro & Social Connect */}
+          <div className="lg:col-span-6 flex flex-col justify-between space-y-8">
             <div className="space-y-5">
               {/* Unboxed Kicker Metadata */}
               <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm text-[#a09c9a]">
@@ -54,7 +77,7 @@ export const Hero: React.FC<HeroProps> = ({
                   config.identity.availability.toUpperCase() !== 'HIDE' && (
                     <>
                       <span aria-hidden="true">·</span>
-                      <span className="text-[#e32b3c] font-medium">
+                      <span className="text-[#f59e0b] font-medium">
                         {config.identity.availability}
                       </span>
                     </>
@@ -64,57 +87,61 @@ export const Hero: React.FC<HeroProps> = ({
               {/* Oversized Personal Name Headline */}
               <div className="space-y-2">
                 <h1
-                  className="font-display text-[#f2efeb] tracking-wide uppercase"
+                  className="font-bold text-[#f2efeb] tracking-tight"
                   style={{
-                    fontSize: 'clamp(2.5rem, 5.4vw, 5.1rem)',
-                    lineHeight: 0.98,
+                    fontFamily: "'Hind Siliguri', var(--font-display)",
+                    fontSize: 'clamp(2.4rem, 5.2vw, 4.75rem)',
+                    lineHeight: 1.08,
                   }}
                 >
                   {config.identity.fullName}
                 </h1>
-                {config.identity.bengaliName && (
-                  <p
-                    className="text-2xl sm:text-4xl font-bold text-[#e32b3c] tracking-tight"
-                    style={{ fontFamily: "'Hind Siliguri', var(--font-body)" }}
-                  >
-                    {config.identity.bengaliName}
-                  </p>
-                )}
+                <p className="font-display text-2xl sm:text-3xl tracking-wider uppercase bg-gradient-to-r from-[#e32b3c] via-[#f59e0b] to-[#f2efeb] bg-clip-text text-transparent">
+                  {config.identity.bengaliName || 'Md Arafat Hossn · arafathossn.com'}
+                </p>
               </div>
 
               {/* Personal Tagline */}
               {config.identity.roleLine2 && (
-                <p className="text-base sm:text-lg font-medium text-[#f2efeb]/90 max-w-2xl">
+                <p
+                  className="text-base sm:text-lg font-medium text-[#f2efeb]/90 max-w-2xl"
+                  style={{ fontFamily: "'Hind Siliguri', var(--font-body)" }}
+                >
                   {config.identity.roleLine2}
                 </p>
               )}
 
               {/* Concise Personal Welcome */}
-              <p className="text-sm sm:text-base text-[#a09c9a] leading-relaxed max-w-[64ch]">
+              <p
+                className="text-sm sm:text-base text-[#a09c9a] leading-relaxed max-w-[62ch]"
+                style={{ fontFamily: "'Hind Siliguri', var(--font-body)" }}
+              >
                 {isBengali
-                  ? 'স্বাগতম! আমি এমডি আরাফাত হোসেন (Md Arafat Hossn)। এটি কোনো প্রফেশনাল পোর্টফোলিও নয়—এটি আমার একান্ত ব্যক্তিগত ওয়েবসাইট। এখানে আমার ভাবনা, প্রিয় বিষয়, ব্যক্তিগত ডায়েরি এবং জীবনের নানা অনুভূতিগুলো সাজিয়ে রাখা হয়েছে।'
-                  : config.identity.intro}
+                  ? config.identity.intro
+                  : 'Welcome! I am Md Arafat Hossn (এমডি আরাফাত হোসেন). This is my personal website (arafathossn.com)—not an agency or commercial portfolio. Here I share my personal photography, technical captures, favorite moments, and direct social links.'}
               </p>
             </div>
 
-            {/* Primary Actions & Unboxed Personal Interests */}
+            {/* Primary Actions & Direct Personal Social Bar */}
             <div className="space-y-6 pt-2">
-              <div className="flex flex-wrap items-center gap-3.5">
+              <div className="flex flex-wrap items-center gap-3">
                 <a
                   href="#work"
-                  className="min-h-[44px] px-6 py-3 rounded-lg text-sm font-semibold text-[#f2efeb] bg-[#e32b3c] hover:bg-[#c82333] transition-colors inline-flex items-center gap-2 whitespace-nowrap shrink-0"
+                  className="min-h-[44px] px-6 py-3 rounded-lg text-sm font-semibold text-[#f2efeb] bg-[#e32b3c] hover:bg-[#c82333] transition-all inline-flex items-center gap-2 whitespace-nowrap shrink-0 shadow-lg shadow-[#e32b3c]/20"
                   style={{ backgroundColor: config.appearance.accent }}
                 >
                   <span>{t.ctaPrimary}</span>
                   <ArrowUpRight className="w-4 h-4" />
                 </a>
 
-                <a
-                  href="#contact"
-                  className="min-h-[44px] px-6 py-3 rounded-lg text-sm font-semibold text-[#f2efeb] bg-[#141414] hover:bg-[#1e1e1e] border border-[#f2efeb]/15 transition-colors inline-flex items-center gap-2 whitespace-nowrap shrink-0"
+                <button
+                  type="button"
+                  onClick={onTriggerSwarmBurst}
+                  className="min-h-[44px] px-5 py-3 rounded-lg text-sm font-semibold text-[#f2efeb] bg-[#151515] hover:bg-[#202020] border border-[#f59e0b]/40 hover:border-[#f59e0b] transition-all inline-flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer"
                 >
-                  <span>{t.ctaSecondary}</span>
-                </a>
+                  <Sparkles className="w-4 h-4 text-[#f59e0b]" />
+                  <span>{isBengali ? 'প্রিমিয়াম মোশন ইফেক্ট' : 'Trigger Motion FX'}</span>
+                </button>
 
                 {onSwitchLanguage && (
                   <button
@@ -125,7 +152,7 @@ export const Hero: React.FC<HeroProps> = ({
                     className="min-h-[44px] px-4 py-3 rounded-lg text-xs font-semibold text-[#f2efeb] bg-[#141414] hover:bg-[#1e1e1e] border border-[#f2efeb]/15 hover:border-[#e32b3c] transition-colors inline-flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer"
                   >
                     <Globe className="w-3.5 h-3.5 text-[#e32b3c]" />
-                    <span>{isBengali ? 'Switch to English' : 'বাংলা ভাষায় দেখুন'}</span>
+                    <span>{isBengali ? 'English Version' : 'বাংলা ভার্সন'}</span>
                   </button>
                 )}
 
@@ -139,126 +166,146 @@ export const Hero: React.FC<HeroProps> = ({
                 </button>
               </div>
 
-              {/* Unboxed Personal Interests (Zero-Pill Discipline) */}
-              {config.portfolio.skills.length > 0 && (
-                <div className="pt-4 border-t border-[#f2efeb]/10">
-                  <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1.5 text-xs text-[#a09c9a]">
-                    <span className="text-[#f2efeb] font-semibold">
-                      {isBengali ? 'পছন্দের বিষয়:' : 'Personal Interests:'}
-                    </span>
-                    {config.portfolio.skills.slice(0, 5).map((skill, idx, arr) => (
-                      <React.Fragment key={skill}>
-                        <span>{skill}</span>
-                        {idx < arr.length - 1 && (
-                          <span aria-hidden="true" className="text-[#f2efeb]/25">
-                            ·
-                          </span>
-                        )}
-                      </React.Fragment>
-                    ))}
-                  </div>
+              {/* Direct Personal Social Links Bar: Instagram, WhatsApp, Facebook, Email */}
+              <div className="pt-5 border-t border-[#f2efeb]/10 space-y-3">
+                <p className="text-xs font-medium text-[#a09c9a]">
+                  {isBengali
+                    ? 'পার্সোনাল সোশ্যাল মিডিয়া ও সরাসরি যোগাযোগ:'
+                    : 'Personal Socials & Direct Connect:'}
+                </p>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  {config.contact.instagram && (
+                    <a
+                      href={config.contact.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-h-[40px] px-4 py-2 rounded-lg bg-[#141414] hover:bg-[#e32b3c] border border-[#f2efeb]/15 text-xs font-semibold text-[#f2efeb] inline-flex items-center gap-2 transition-colors whitespace-nowrap shrink-0"
+                    >
+                      <Instagram className="w-3.5 h-3.5 text-[#f59e0b]" />
+                      <span>Instagram</span>
+                    </a>
+                  )}
+
+                  {whatsappUrl && (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-h-[40px] px-4 py-2 rounded-lg bg-[#141414] hover:bg-[#e32b3c] border border-[#f2efeb]/15 text-xs font-semibold text-[#f2efeb] inline-flex items-center gap-2 transition-colors whitespace-nowrap shrink-0"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5 text-[#f59e0b]" />
+                      <span>WhatsApp</span>
+                    </a>
+                  )}
+
+                  {config.contact.facebook && (
+                    <a
+                      href={config.contact.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="min-h-[40px] px-4 py-2 rounded-lg bg-[#141414] hover:bg-[#e32b3c] border border-[#f2efeb]/15 text-xs font-semibold text-[#f2efeb] inline-flex items-center gap-2 transition-colors whitespace-nowrap shrink-0"
+                    >
+                      <Facebook className="w-3.5 h-3.5 text-[#f59e0b]" />
+                      <span>Facebook</span>
+                    </a>
+                  )}
+
+                  {config.contact.email && (
+                    <a
+                      href={`mailto:${config.contact.email}`}
+                      className="min-h-[40px] px-4 py-2 rounded-lg bg-[#141414] hover:bg-[#e32b3c] border border-[#f2efeb]/15 text-xs font-semibold text-[#f2efeb] inline-flex items-center gap-2 transition-colors whitespace-nowrap shrink-0"
+                    >
+                      <Mail className="w-3.5 h-3.5 text-[#e32b3c]" />
+                      <span>{config.contact.email}</span>
+                    </a>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           </div>
 
-          {/* Right Column: Personal Portrait (if supplied) OR Swarmline Personal Sanctuary Card */}
-          <div className="lg:col-span-5 flex flex-col transition-all duration-700">
-            {hasRealPortrait ? (
-              <div className="relative w-full h-full min-h-[380px] lg:min-h-[440px] rounded-2xl overflow-hidden bg-[#121212] border border-[#f2efeb]/10">
+          {/* Right Column: এমডি আরাফাত হোসেন — ব্যক্তিগত ওয়েবসাইট Portrait Showcase Frame with Live Premium Motion */}
+          <div className="lg:col-span-6 flex flex-col">
+            <div className="relative w-full h-full min-h-[420px] lg:min-h-[500px] rounded-2xl bg-[#111111] border border-[#f59e0b]/25 overflow-hidden flex flex-col justify-between shadow-2xl group">
+              {/* User's Portrait Photo Background */}
+              {hasRealPortrait && (
                 <img
                   src={config.identity.portrait}
-                  alt={`${config.identity.fullName} — ${config.identity.bengaliName || ''}`}
+                  alt="এমডি আরাফাত হোসেন (Md Arafat Hossn)"
                   referrerPolicy="no-referrer"
                   onError={() => setPortraitError(true)}
-                  className="w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-[1.03] transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between">
-                  <div>
-                    <p className="font-display text-2xl text-[#f2efeb] tracking-wide">
-                      {config.identity.fullName}
-                    </p>
-                    <p className="text-xs text-[#a09c9a]">
-                      {config.identity.bengaliName || config.identity.profession}
-                    </p>
-                  </div>
-                </div>
+              )}
+
+              {/* Measured Editorial Scrim for Crisp Readability */}
+              <div className="absolute inset-0 bg-gradient-to-t from-[#090909] via-[#090909]/25 to-[#090909]/60 pointer-events-none" />
+
+              {/* Interactive Premium Swarmline & Golden Bokeh Motion Overlay */}
+              <div className="absolute inset-0 opacity-75 pointer-events-none">
+                <SwarmlineCanvas
+                  active={motionEnabled}
+                  burstKey={swarmBurstKey}
+                  accentColor={config.appearance.accent}
+                  textColor={config.appearance.text}
+                  mutedColor={config.appearance.muted}
+                  mode="contained"
+                  intensity={config.appearance.animationIntensity}
+                />
               </div>
-            ) : (
-              <div className="relative w-full h-full min-h-[360px] lg:min-h-[440px] rounded-2xl bg-[#111111] border border-[#f2efeb]/10 overflow-hidden flex flex-col justify-between p-6 sm:p-8">
-                {/* Interactive Swarmline Vector Canvas Background */}
-                <div className="absolute inset-0 opacity-90">
-                  <SwarmlineCanvas
-                    active={motionEnabled}
-                    burstKey={swarmBurstKey}
-                    accentColor={config.appearance.accent}
-                    textColor={config.appearance.text}
-                    mutedColor={config.appearance.muted}
-                    mode="contained"
-                    intensity={config.appearance.animationIntensity}
-                  />
-                </div>
 
-                {/* Top Personal Card Header */}
-                <div className="relative z-10 flex items-center justify-between gap-4 border-b border-[#f2efeb]/10 pb-4">
-                  <div>
-                    <p className="text-xs font-medium text-[#f2efeb]">
-                      {config.identity.fullName}
-                    </p>
-                    <p className="text-xs text-[#a09c9a]">
-                      {config.identity.bengaliName || 'এমডি আরাফাত হোসেন'}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={onTriggerSwarmBurst}
-                      className="min-h-[36px] px-3 py-1.5 rounded-md bg-[#090909]/85 border border-[#f2efeb]/15 hover:border-[#e32b3c] text-xs font-medium text-[#f2efeb] inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
-                    >
-                      <Sparkles className="w-3.5 h-3.5 text-[#e32b3c]" />
-                      <span>Pulse Swarm</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onToggleMotionPreference}
-                      className="min-h-[36px] px-2.5 py-1.5 rounded-md bg-[#090909]/85 border border-[#f2efeb]/15 hover:border-[#f2efeb]/40 text-xs font-mono-tabular text-[#a09c9a] hover:text-[#f2efeb] transition-colors cursor-pointer whitespace-nowrap shrink-0"
-                    >
-                      {motionEnabled ? 'Pause' : 'Play'}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Center Personal Sanctuary Callout */}
-                <div className="relative z-10 my-auto py-8">
-                  <p className="font-accent text-2xl sm:text-3xl text-[#e32b3c] mb-2">
-                    Personal Digital Sanctuary
-                  </p>
-                  <p className="font-display text-3xl sm:text-4xl text-[#f2efeb] tracking-wide uppercase leading-tight">
-                    {config.identity.fullName}
-                  </p>
+              {/* Top Glass Control Bar on Portrait */}
+              <div className="relative z-10 flex items-center justify-between gap-3 px-5 py-4 bg-[#090909]/65 backdrop-blur-md border-b border-[#f2efeb]/10">
+                <div>
                   <p
-                    className="mt-1 text-lg sm:text-xl font-semibold text-[#f2efeb]/90"
+                    className="text-xs sm:text-sm font-bold text-[#f2efeb]"
                     style={{ fontFamily: "'Hind Siliguri', var(--font-body)" }}
                   >
-                    এমডি আরাফাত হোসেন — ব্যক্তিগত ওয়েবসাইট
+                    এমডি আরাফাত হোসেন
                   </p>
-                  <p className="mt-3 text-xs sm:text-sm text-[#a09c9a] max-w-md leading-relaxed">
-                    {config.identity.positioning}
+                  <p className="text-xs font-mono-tabular text-[#f59e0b]">
+                    arafathossn.com
                   </p>
                 </div>
 
-                {/* Bottom Personal Interests Footer */}
-                <div className="relative z-10 pt-4 border-t border-[#f2efeb]/10 flex flex-wrap items-center justify-between gap-2 text-xs text-[#a09c9a]">
-                  <span>Personal Space (No Portfolio)</span>
-                  <span aria-hidden="true">·</span>
-                  <span className="font-mono-tabular">
-                    {config.portfolio.tools.slice(0, 4).join(' · ')}
-                  </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={onTriggerSwarmBurst}
+                    className="min-h-[36px] px-3 py-1.5 rounded-md bg-[#090909]/85 border border-[#f59e0b]/40 hover:border-[#f59e0b] text-xs font-medium text-[#f2efeb] inline-flex items-center gap-1.5 transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-[#f59e0b]" />
+                    <span>Pulse Motion</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onToggleMotionPreference}
+                    className="min-h-[36px] px-2.5 py-1.5 rounded-md bg-[#090909]/85 border border-[#f2efeb]/15 hover:border-[#f2efeb]/40 text-xs font-mono-tabular text-[#a09c9a] hover:text-[#f2efeb] transition-colors cursor-pointer whitespace-nowrap shrink-0"
+                  >
+                    {motionEnabled ? 'Pause' : 'Play'}
+                  </button>
                 </div>
               </div>
-            )}
+
+              {/* Bottom Personal Signature Overlay on Portrait */}
+              <div className="relative z-10 mt-auto p-6 sm:p-7 bg-gradient-to-t from-[#090909] via-[#090909]/85 to-transparent space-y-2">
+                <p className="font-accent text-2xl sm:text-3xl text-[#f59e0b]">
+                  Personal Space · arafathossn.com
+                </p>
+                <h2
+                  className="text-2xl sm:text-3xl font-bold text-[#f2efeb] tracking-tight"
+                  style={{ fontFamily: "'Hind Siliguri', var(--font-body)" }}
+                >
+                  এমডি আরাফাত হোসেন — ব্যক্তিগত ওয়েবসাইট
+                </h2>
+                <p
+                  className="text-xs sm:text-sm text-[#a09c9a] max-w-lg leading-relaxed"
+                  style={{ fontFamily: "'Hind Siliguri', var(--font-body)" }}
+                >
+                  {config.identity.positioning}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -268,7 +315,10 @@ export const Hero: React.FC<HeroProps> = ({
             {config.portfolio.metrics.map((metric) => (
               <div key={metric.label} className="space-y-1">
                 <p className="text-xs text-[#a09c9a]">{metric.label}</p>
-                <p className="font-display text-2xl sm:text-3xl text-[#f2efeb] font-mono-tabular tracking-wide">
+                <p
+                  className="text-xl sm:text-2xl font-bold text-[#f2efeb] tracking-wide"
+                  style={{ fontFamily: "'Hind Siliguri', var(--font-display)" }}
+                >
                   {metric.value}
                 </p>
                 <p className="text-xs text-[#a09c9a]/80">{metric.context}</p>

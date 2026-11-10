@@ -11,6 +11,17 @@ interface SwarmlineCanvasProps {
   intensity?: 'subtle' | 'balanced' | 'expressive';
 }
 
+interface BokehOrb {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  radius: number;
+  color: string;
+  alpha: number;
+  phase: number;
+}
+
 export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
   active,
   burstKey,
@@ -18,12 +29,13 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
   textColor,
   mutedColor,
   mode = 'overlay',
-  intensity = 'balanced',
+  intensity = 'expressive',
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const activeRef = useRef(active);
   const colorsRef = useRef({ accentColor, textColor, mutedColor });
   const agentsRef = useRef<SwarmAgent[]>([]);
+  const orbsRef = useRef<BokehOrb[]>([]);
   const pointerRef = useRef<{ x: number; y: number; active: boolean }>({
     x: 0,
     y: 0,
@@ -41,14 +53,13 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
 
   useEffect(() => {
     if (burstKey > 0) {
-      burstImpulseRef.current = 45;
-      // Give agents a radial velocity impulse on burst click
+      burstImpulseRef.current = 60;
       agentsRef.current = agentsRef.current.map((agent, idx) => {
         const angle = (idx / Math.max(agentsRef.current.length, 1)) * Math.PI * 2;
         return {
           ...agent,
-          vx: Math.cos(angle) * 5.2,
-          vy: Math.sin(angle) * 5.2,
+          vx: Math.cos(angle) * 6.4,
+          vy: Math.sin(angle) * 6.4,
         };
       });
     }
@@ -61,7 +72,22 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
     if (!ctx) return;
 
     const agentCount =
-      intensity === 'expressive' ? 28 : intensity === 'subtle' ? 12 : 20;
+      intensity === 'expressive' ? 32 : intensity === 'subtle' ? 14 : 24;
+    const orbCount = mode === 'overlay' ? 18 : 12;
+
+    const initOrbs = (w: number, h: number): BokehOrb[] => {
+      const palette = ['#f59e0b', '#e32b3c', '#fbbf24', '#f2efeb'];
+      return Array.from({ length: orbCount }, (_, i) => ({
+        x: ((i * 97) % Math.max(w, 300)) + 20,
+        y: ((i * 67) % Math.max(h, 250)) + 20,
+        vx: (i % 2 === 0 ? 1 : -1) * (0.2 + (i % 4) * 0.08),
+        vy: (i % 3 === 0 ? 1 : -1) * (0.15 + (i % 3) * 0.07),
+        radius: mode === 'overlay' ? 18 + (i % 5) * 14 : 12 + (i % 4) * 9,
+        color: palette[i % palette.length],
+        alpha: mode === 'overlay' ? 0.09 : 0.14,
+        phase: i * 0.7,
+      }));
+    };
 
     const updateSize = () => {
       const rect =
@@ -82,6 +108,9 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
           rect.width,
           rect.height
         );
+      }
+      if (orbsRef.current.length === 0) {
+        orbsRef.current = initOrbs(rect.width, rect.height);
       }
     };
 
@@ -116,37 +145,12 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
     let rafId = 0;
     let tick = 0;
 
-    const drawStaticFrame = () => {
-      const width = canvas.width / Math.min(window.devicePixelRatio || 1, 2);
-      const height = canvas.height / Math.min(window.devicePixelRatio || 1, 2);
-      ctx.clearRect(0, 0, width, height);
-      if (mode === 'contained') {
-        // Draw clean architectural static curves when motion is paused
-        ctx.save();
-        ctx.strokeStyle = colorsRef.current.accentColor;
-        ctx.globalAlpha = 0.35;
-        ctx.lineWidth = 1.5;
-        ctx.beginPath();
-        ctx.moveTo(width * 0.1, height * 0.75);
-        ctx.bezierCurveTo(
-          width * 0.35,
-          height * 0.15,
-          width * 0.65,
-          height * 0.85,
-          width * 0.9,
-          height * 0.25
-        );
-        ctx.stroke();
-        ctx.restore();
-      }
-    };
-
     const renderLoop = () => {
       const width = canvas.width / Math.min(window.devicePixelRatio || 1, 2);
       const height = canvas.height / Math.min(window.devicePixelRatio || 1, 2);
 
       if (!activeRef.current) {
-        drawStaticFrame();
+        ctx.clearRect(0, 0, width, height);
         rafId = window.requestAnimationFrame(renderLoop);
         return;
       }
@@ -158,6 +162,37 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
 
       ctx.clearRect(0, 0, width, height);
 
+      // 1. Render Luxury Warm Bokeh Orbs (matching the golden café bokeh in portrait)
+      ctx.save();
+      for (const orb of orbsRef.current) {
+        orb.x += orb.vx;
+        orb.y += orb.vy;
+        if (orb.x < -orb.radius) orb.x = width + orb.radius;
+        if (orb.x > width + orb.radius) orb.x = -orb.radius;
+        if (orb.y < -orb.radius) orb.y = height + orb.radius;
+        if (orb.y > height + orb.radius) orb.y = -orb.radius;
+
+        const pulse = 0.75 + 0.25 * Math.sin(tick * 0.03 + orb.phase);
+        const grad = ctx.createRadialGradient(
+          orb.x,
+          orb.y,
+          0,
+          orb.x,
+          orb.y,
+          orb.radius * (burstImpulseRef.current > 0 ? 1.4 : 1)
+        );
+        grad.addColorStop(0, orb.color);
+        grad.addColorStop(1, 'transparent');
+
+        ctx.fillStyle = grad;
+        ctx.globalAlpha = orb.alpha * pulse;
+        ctx.beginPath();
+        ctx.arc(orb.x, orb.y, orb.radius * 1.4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // 2. Step Swarm Agents
       agentsRef.current = stepSwarmAgents(
         agentsRef.current,
         { width, height },
@@ -165,24 +200,23 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
         tick
       );
 
-      // Render smooth spline-like swarm trails and inter-agent filaments
       const agents = agentsRef.current;
-      const { accentColor: acc, textColor: txt, mutedColor: mut } =
-        colorsRef.current;
+      const { accentColor: acc, textColor: txt } = colorsRef.current;
 
-      // Subtle connecting filaments between nearby swarm heads
+      // 3. Render Constellation Filaments
       ctx.save();
       for (let i = 0; i < agents.length; i++) {
         for (let j = i + 1; j < agents.length; j++) {
           const dx = agents[i].x - agents[j].x;
           const dy = agents[i].y - agents[j].y;
           const dist = Math.hypot(dx, dy);
-          const threshold = mode === 'overlay' ? 140 : 105;
+          const threshold = mode === 'overlay' ? 150 : 115;
           if (dist < threshold) {
-            const alpha = (1 - dist / threshold) * (mode === 'overlay' ? 0.16 : 0.24);
-            ctx.strokeStyle = i % 2 === 0 ? acc : txt;
+            const alpha =
+              (1 - dist / threshold) * (mode === 'overlay' ? 0.2 : 0.28);
+            ctx.strokeStyle = i % 3 === 0 ? '#f59e0b' : i % 2 === 0 ? acc : txt;
             ctx.globalAlpha = alpha;
-            ctx.lineWidth = 0.8;
+            ctx.lineWidth = 0.9;
             ctx.beginPath();
             ctx.moveTo(agents[i].x, agents[i].y);
             ctx.lineTo(agents[j].x, agents[j].y);
@@ -192,32 +226,34 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
       }
       ctx.restore();
 
-      // Render each agent's flowing ribbon trail
-      for (const agent of agents) {
+      // 4. Render Multi-Stop Silk Ribbon Trails
+      for (let idx = 0; idx < agents.length; idx++) {
+        const agent = agents[idx];
         if (agent.trail.length < 2) continue;
         ctx.save();
-        ctx.strokeStyle =
+        const isGolden = idx % 3 === 2;
+        const strokeColor =
           agent.hueType === 'accent'
             ? acc
-            : agent.hueType === 'ivory'
-            ? txt
-            : mut;
+            : isGolden
+            ? '#f59e0b'
+            : txt;
+
+        ctx.strokeStyle = strokeColor;
         ctx.lineWidth =
-          agent.hueType === 'accent'
+          agent.hueType === 'accent' || isGolden
             ? burstImpulseRef.current > 0
-              ? 2.4
-              : 1.75
-            : 1.15;
+              ? 2.8
+              : 2.0
+            : 1.25;
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.globalAlpha =
           mode === 'overlay'
-            ? agent.hueType === 'accent'
-              ? 0.55
-              : 0.28
-            : agent.hueType === 'accent'
-            ? 0.82
-            : 0.45;
+            ? agent.hueType === 'accent' || isGolden
+              ? 0.65
+              : 0.35
+            : 0.78;
 
         ctx.beginPath();
         ctx.moveTo(agent.trail[0].x, agent.trail[0].y);
@@ -230,12 +266,37 @@ export const SwarmlineCanvas: React.FC<SwarmlineCanvasProps> = ({
         ctx.lineTo(last.x, last.y);
         ctx.stroke();
 
-        // Draw crisp vector head node
-        ctx.fillStyle = agent.hueType === 'accent' ? acc : txt;
-        ctx.globalAlpha = mode === 'overlay' ? 0.7 : 0.9;
+        // Luminous Head Node
+        ctx.fillStyle = strokeColor;
+        ctx.globalAlpha = 0.92;
         ctx.beginPath();
-        ctx.arc(last.x, last.y, agent.hueType === 'accent' ? 2.2 : 1.5, 0, Math.PI * 2);
+        ctx.arc(
+          last.x,
+          last.y,
+          agent.hueType === 'accent' || isGolden ? 2.6 : 1.7,
+          0,
+          Math.PI * 2
+        );
         ctx.fill();
+        ctx.restore();
+      }
+
+      // 5. Cursor Magnetic Halo when pointer is active
+      if (pointerRef.current.active) {
+        ctx.save();
+        const haloRadius = 26 + Math.sin(tick * 0.08) * 5;
+        ctx.strokeStyle = '#f59e0b';
+        ctx.globalAlpha = 0.35;
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(
+          pointerRef.current.x,
+          pointerRef.current.y,
+          haloRadius,
+          0,
+          Math.PI * 2
+        );
+        ctx.stroke();
         ctx.restore();
       }
 

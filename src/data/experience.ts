@@ -2,109 +2,61 @@ import { ExperienceItem, EducationItem, ProcessStep, MetricItem } from '../confi
 
 export const VERIFIED_EXPERIENCE: ExperienceItem[] = [
   {
-    id: 'journey-personal-sanctuary',
-    role: 'Writing, Digital Gardening & Personal Exploration',
-    organization: 'Md Arafat Hossn · এমডি আরাফাত হোসেন',
-    period: 'Present Chapter',
-    location: 'Bangladesh',
-    type: 'Personal Chapter',
+    id: 'moment-photography-captures',
+    role: 'নিজের ফটোগ্রাফি ও টেকনিক্যাল ক্যাপচার (Personal Photography & Captures)',
+    organization: 'এমডি আরাফাত হোসেন · arafathossn.com',
+    period: 'নিয়মিত শখ',
+    location: 'বাংলাদেশ',
+    type: 'Personal Hobby',
     summary:
-      'Documenting personal essays, reading notes, technological curiosities, and reflections on intentional living.',
+      'নতুন জায়গা ঘুরে দেখা, সন্ধ্যার বোকেহ লাইট, প্রকৃতির রঙ এবং নিজের প্রিয় মুহূর্তগুলো ক্যামেরায় ক্যাপচার করা আমার অন্যতম প্রিয় শখ।',
     highlights: [
-      'Maintaining an independent personal website and bilingual (English & বাংলা) digital journal.',
-      'Exploring books, philosophy, digital culture, and everyday creative habits.',
-      'Connecting with like-minded readers and friends around the world.',
+      'পোর্ট্রেট ফটোগ্রাফি, লো-লাইট বোকেহ এবং ন্যাচারাল ফ্রেমিং নিয়ে নিজের মতো এক্সপেরিমেন্ট করা।',
+      'হাই-রেজোলিউশন টেকনিক্যাল ক্যাপচার ও কালার টোনিং সংগ্রহ করে রাখা।',
+      'ইন্সটাগ্রাম ও ফেসবুকে বন্ধুদের সাথে প্রিয় ছবি ও মুহূর্তগুলো শেয়ার করা।',
     ],
-    tools: ['Writing', 'Reading', 'Philosophy', 'Digital Culture'],
+    tools: ['Portrait', 'Bokeh', 'Light & Shadow', 'Nature'],
   },
   {
-    id: 'journey-community-learning',
-    role: 'Independent Learner & Community Contributor',
-    organization: 'Self-Directed Study & Open Knowledge',
-    period: 'Ongoing',
-    location: 'Bangladesh',
-    type: 'Life & Learning',
+    id: 'moment-lifestyle-travel',
+    role: 'ভ্রমণ, কফি ও আড্ডা (Lifestyle, Coffee & Exploring)',
+    organization: 'ব্যক্তিগত জীবন ও বন্ধুমহল',
+    period: 'সবসময়',
+    location: 'বাংলাদেশ',
+    type: 'Lifestyle',
     summary:
-      'Focused on continuous self-improvement, learning modern web and creative tools for personal expression, and sharing helpful notes.',
+      'কাজের বা নিয়মের বাঁধাধরা গণ্ডির বাইরে নিজের মতো সময় কাটানো, ক্যাফেতে আড্ডা দেওয়া এবং নতুন অভিজ্ঞতা সংগ্রহ করা।',
     highlights: [
-      'Practicing disciplined daily reading and long-form note-taking.',
-      'Building personal web experiments and interactive visual ideas like Swarmline.',
+      'শান্ত পরিবেশে কফি ও গানের সাথে সময় কাটানো।',
+      'নতুন জায়গা ভ্রমণ এবং বন্ধুদের সাথে স্মরণীয় মুহূর্ত তৈরি করা।',
     ],
-    tools: ['Self-Study', 'Web Craft', 'Creative Coding', 'Community'],
+    tools: ['Coffee', 'Travel', 'Friends', 'Music'],
   },
 ];
 
-export const VERIFIED_EDUCATION: EducationItem[] = [
-  {
-    id: 'edu-lifelong-learning',
-    qualification: 'Continuous Reading & Self-Education (স্বশিক্ষা ও পাঠচর্চা)',
-    institution: 'Personal Library & Open Courses',
-    period: 'Always Learning',
-    details:
-      'Dedicated to lifelong learning across literature, technology, philosophy, and personal growth in both Bengali and English.',
-  },
-  {
-    id: 'edu-foundations',
-    qualification: 'Academic & Personal Foundations',
-    institution: 'Bangladesh',
-    period: 'Foundational Years',
-    details:
-      'Shaped by curiosity, discipline, cultural roots, and a commitment to honest character and continuous growth.',
-  },
-];
+export const VERIFIED_EDUCATION: EducationItem[] = [];
 
-export const VERIFIED_PROCESS_STEPS: ProcessStep[] = [
-  {
-    number: '01',
-    title: 'Curiosity First',
-    description:
-      'Asking honest questions and staying open to new perspectives every day.',
-  },
-  {
-    number: '02',
-    title: 'Deep Reading',
-    description:
-      'Spending time with thoughtful books, essays, and ideas rather than fleeting headlines.',
-  },
-  {
-    number: '03',
-    title: 'Clear Reflection',
-    description:
-      'Writing down thoughts in plain language to understand life and ideas more deeply.',
-  },
-  {
-    number: '04',
-    title: 'Intentional Simplicity',
-    description:
-      'Keeping daily routines, digital spaces, and commitments uncluttered and meaningful.',
-  },
-  {
-    number: '05',
-    title: 'Genuine Connection',
-    description:
-      'Valuing kindness, respect, and real conversations with people everywhere.',
-  },
-];
+export const VERIFIED_PROCESS_STEPS: ProcessStep[] = [];
 
 export const VERIFIED_METRICS: MetricItem[] = [
   {
-    label: 'Identity',
-    value: 'Md Arafat Hossn',
-    context: 'এমডি আরাফাত হোসেন · Personal Site',
+    label: 'নাম (Identity)',
+    value: 'এমডি আরাফাত হোসেন',
+    context: 'Md Arafat Hossn · ব্যক্তিগত ওয়েবসাইট',
   },
   {
-    label: 'Site Purpose',
-    value: 'Personal Space',
-    context: 'Journal, ideas & life notes (Not a commercial portfolio)',
+    label: 'ডোমেইন (Domain)',
+    value: 'arafathossn.com',
+    context: 'অফিশিয়াল পার্সোনাল ওয়েবসাইট',
   },
   {
-    label: 'Languages',
-    value: 'বাংলা · English',
-    context: 'Bilingual personal reflections & writing',
+    label: 'পছন্দ (Passions)',
+    value: 'ফটোগ্রাফি ও ক্যাপচার',
+    context: 'নিজের ফটোগ্রাফি, পোর্ট্রেট ও টেকনিক্যাল শট',
   },
   {
-    label: 'Home Base',
-    value: 'Bangladesh',
-    context: 'Open to friendly conversations worldwide',
+    label: 'সোশ্যাল (Connect)',
+    value: 'IG · WA · FB',
+    context: 'ইনস্টাগ্রাম, হোয়াটসঅ্যাপ, ফেসবুক ও ইমেইল',
   },
 ];

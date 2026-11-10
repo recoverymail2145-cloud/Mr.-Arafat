@@ -59,10 +59,10 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
               id="config-studio-title"
               className="font-display text-2xl tracking-wide uppercase"
             >
-              Universal Config Studio (site.ts)
+              ইমেইল, সোশ্যাল ও তথ্য পরিবর্তন (arafathossn.com)
             </h2>
             <p className="text-xs text-[#a09c9a]">
-              Live-edit Section 0 parameters or test empty/optional states.
+              আপনার ইমেইল, হোয়াটসঅ্যাপ, ইনস্টাগ্রাম ও ফেসবুক লিংক এখানে বসাতে পারবেন।
             </p>
           </div>
           <button
@@ -77,10 +77,117 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
 
         {/* Form Controls */}
         <div className="p-6 space-y-6">
-          {/* Identity Overrides */}
+          {/* Email & Social Links (Top Priority for User) */}
           <div className="space-y-4">
+            <h3 className="text-xs font-mono-tabular text-[#f59e0b] uppercase">
+              ১. আপনার ইমেইল ও সোশ্যাল মিডিয়া (Email &amp; Socials)
+            </h3>
+
+            <div>
+              <label
+                htmlFor="cfg-email"
+                className="block text-xs text-[#f2efeb] font-medium mb-1"
+              >
+                আপনার ইমেইল (Your Email)
+              </label>
+              <input
+                id="cfg-email"
+                type="email"
+                value={config.contact.email}
+                onChange={(e) =>
+                  onUpdateConfig({
+                    ...config,
+                    contact: {
+                      ...config.contact,
+                      email: e.target.value,
+                    },
+                  })
+                }
+                placeholder="yourname@gmail.com"
+                className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f59e0b]/40 text-sm text-[#f2efeb]"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label
+                  htmlFor="cfg-whatsapp"
+                  className="block text-xs text-[#a09c9a] mb-1"
+                >
+                  WhatsApp নম্বর (International digits)
+                </label>
+                <input
+                  id="cfg-whatsapp"
+                  type="text"
+                  value={config.contact.whatsapp}
+                  onChange={(e) =>
+                    onUpdateConfig({
+                      ...config,
+                      contact: {
+                        ...config.contact,
+                        whatsapp: e.target.value,
+                      },
+                    })
+                  }
+                  placeholder="88017XXXXXXXX"
+                  className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="cfg-instagram"
+                  className="block text-xs text-[#a09c9a] mb-1"
+                >
+                  Instagram URL
+                </label>
+                <input
+                  id="cfg-instagram"
+                  type="url"
+                  value={config.contact.instagram}
+                  onChange={(e) =>
+                    onUpdateConfig({
+                      ...config,
+                      contact: {
+                        ...config.contact,
+                        instagram: e.target.value,
+                      },
+                    })
+                  }
+                  className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="cfg-facebook"
+                className="block text-xs text-[#a09c9a] mb-1"
+              >
+                Facebook URL
+              </label>
+              <input
+                id="cfg-facebook"
+                type="url"
+                value={config.contact.facebook || ''}
+                onChange={(e) =>
+                  onUpdateConfig({
+                    ...config,
+                    contact: {
+                      ...config.contact,
+                      facebook: e.target.value,
+                    },
+                  })
+                }
+                className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
+              />
+            </div>
+          </div>
+
+          {/* Identity Overrides */}
+          <div className="pt-4 border-t border-[#f2efeb]/10 space-y-4">
             <h3 className="text-xs font-mono-tabular text-[#e32b3c] uppercase">
-              Identity &amp; Profession
+              ২. নাম ও ডোমেইন (Name &amp; Domain)
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -89,7 +196,7 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                   htmlFor="cfg-display-name"
                   className="block text-xs text-[#a09c9a] mb-1"
                 >
-                  Display Name / Brand
+                  সাইটের নাম (Site Name)
                 </label>
                 <input
                   id="cfg-display-name"
@@ -101,6 +208,7 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                       identity: {
                         ...config.identity,
                         displayName: e.target.value,
+                        fullName: e.target.value,
                       },
                     })
                   }
@@ -110,82 +218,31 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
 
               <div>
                 <label
-                  htmlFor="cfg-full-name"
+                  htmlFor="cfg-domain"
                   className="block text-xs text-[#a09c9a] mb-1"
                 >
-                  Full Name
+                  ডোমেইন (Domain)
                 </label>
                 <input
-                  id="cfg-full-name"
+                  id="cfg-domain"
                   type="text"
-                  value={config.identity.fullName}
+                  value={config.websiteUrl}
                   onChange={(e) =>
                     onUpdateConfig({
                       ...config,
-                      identity: {
-                        ...config.identity,
-                        fullName: e.target.value,
-                      },
+                      websiteUrl: e.target.value,
                     })
                   }
                   className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
                 />
               </div>
             </div>
-
-            <div>
-              <label
-                htmlFor="cfg-profession"
-                className="block text-xs text-[#a09c9a] mb-1"
-              >
-                Profession Line
-              </label>
-              <input
-                id="cfg-profession"
-                type="text"
-                value={config.identity.profession}
-                onChange={(e) =>
-                  onUpdateConfig({
-                    ...config,
-                    identity: {
-                      ...config.identity,
-                      profession: e.target.value,
-                    },
-                  })
-                }
-                className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="cfg-headline"
-                className="block text-xs text-[#a09c9a] mb-1"
-              >
-                Hero Headline
-              </label>
-              <input
-                id="cfg-headline"
-                type="text"
-                value={config.identity.headline}
-                onChange={(e) =>
-                  onUpdateConfig({
-                    ...config,
-                    identity: {
-                      ...config.identity,
-                      headline: e.target.value,
-                    },
-                  })
-                }
-                className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
-              />
-            </div>
           </div>
 
           {/* Appearance & Language */}
           <div className="pt-4 border-t border-[#f2efeb]/10 space-y-4">
             <h3 className="text-xs font-mono-tabular text-[#e32b3c] uppercase">
-              Appearance &amp; Localization
+              ৩. ভাষা ও প্রিমিয়াম মোশন (Language &amp; Motion)
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -194,7 +251,7 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                   htmlFor="cfg-language"
                   className="block text-xs text-[#a09c9a] mb-1"
                 >
-                  Language
+                  ভাষা (Language)
                 </label>
                 <select
                   id="cfg-language"
@@ -210,8 +267,8 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                   }
                   className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
                 >
-                  <option value="English">English</option>
                   <option value="Bengali">বাংলা (Bengali)</option>
+                  <option value="English">English</option>
                   <option value="Hindi">Hindi (हिन्दी)</option>
                   <option value="Indonesian">Indonesian (Bahasa)</option>
                 </select>
@@ -222,7 +279,7 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                   htmlFor="cfg-intensity"
                   className="block text-xs text-[#a09c9a] mb-1"
                 >
-                  Swarmline Intensity
+                  Motion Intensity
                 </label>
                 <select
                   id="cfg-intensity"
@@ -239,22 +296,15 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                   }
                   className="w-full min-h-[40px] px-3 py-2 rounded-lg bg-[#090909] border border-[#f2efeb]/15 text-sm text-[#f2efeb]"
                 >
-                  <option value="subtle">Subtle</option>
+                  <option value="expressive">Expressive (Premium)</option>
                   <option value="balanced">Balanced</option>
-                  <option value="expressive">Expressive</option>
+                  <option value="subtle">Subtle</option>
                 </select>
               </div>
             </div>
-          </div>
-
-          {/* Section Preferences & Empty State Verification */}
-          <div className="pt-4 border-t border-[#f2efeb]/10 space-y-3">
-            <h3 className="text-xs font-mono-tabular text-[#e32b3c] uppercase">
-              Section Visibility &amp; Data Honesty Toggles
-            </h3>
 
             <label className="flex items-center justify-between py-2 text-sm cursor-pointer">
-              <span>Show Verified Projects ({VERIFIED_PROJECTS.length})</span>
+              <span>Show Photography &amp; Captures ({VERIFIED_PROJECTS.length})</span>
               <input
                 type="checkbox"
                 checked={hasProjects}
@@ -264,60 +314,6 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
                     portfolio: {
                       ...config.portfolio,
                       projects: e.target.checked ? VERIFIED_PROJECTS : [],
-                    },
-                  })
-                }
-                className="w-4 h-4 accent-[#e32b3c]"
-              />
-            </label>
-
-            <label className="flex items-center justify-between py-2 text-sm cursor-pointer">
-              <span>Show Experience Timeline</span>
-              <input
-                type="checkbox"
-                checked={config.preferences.showExperience}
-                onChange={(e) =>
-                  onUpdateConfig({
-                    ...config,
-                    preferences: {
-                      ...config.preferences,
-                      showExperience: e.target.checked,
-                    },
-                  })
-                }
-                className="w-4 h-4 accent-[#e32b3c]"
-              />
-            </label>
-
-            <label className="flex items-center justify-between py-2 text-sm cursor-pointer">
-              <span>Show Education &amp; Milestones</span>
-              <input
-                type="checkbox"
-                checked={config.preferences.showEducation}
-                onChange={(e) =>
-                  onUpdateConfig({
-                    ...config,
-                    preferences: {
-                      ...config.preferences,
-                      showEducation: e.target.checked,
-                    },
-                  })
-                }
-                className="w-4 h-4 accent-[#e32b3c]"
-              />
-            </label>
-
-            <label className="flex items-center justify-between py-2 text-sm cursor-pointer">
-              <span>Show Static Contact Form</span>
-              <input
-                type="checkbox"
-                checked={config.preferences.showContactForm}
-                onChange={(e) =>
-                  onUpdateConfig({
-                    ...config,
-                    preferences: {
-                      ...config.preferences,
-                      showContactForm: e.target.checked,
                     },
                   })
                 }
@@ -338,7 +334,7 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
             className="min-h-[40px] px-4 py-2 rounded-lg bg-[#1a1a1a] border border-[#f2efeb]/15 text-xs font-medium text-[#a09c9a] hover:text-[#f2efeb] inline-flex items-center gap-1.5 cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
-            <span>Reset Defaults</span>
+            <span>Reset</span>
           </button>
 
           <button
@@ -349,12 +345,12 @@ export const ConfigStudioDrawer: React.FC<ConfigStudioDrawerProps> = ({
             {copiedConfig ? (
               <>
                 <Check className="w-3.5 h-3.5" />
-                <span>Config JSON Copied</span>
+                <span>Copied!</span>
               </>
             ) : (
               <>
                 <Copy className="w-3.5 h-3.5" />
-                <span>Copy Config JSON</span>
+                <span>Copy Config</span>
               </>
             )}
           </button>
